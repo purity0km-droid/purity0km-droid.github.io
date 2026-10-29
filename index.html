@@ -91,7 +91,8 @@ body{margin:0;font-family:var(--f-jp);overflow-x:hidden}
 .bub b{display:block;margin-bottom:1px;font-size:10px;font-weight:700;color:var(--acc)}
 .bub.me{align-self:flex-end;background:var(--acc);color:#fff;border-radius:14px 4px 14px 14px}
 .s-kit{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-content:center;gap:6px}
-.chip{display:flex;flex-direction:column;gap:5px;padding:8px 7px;border-radius:10px;background:var(--paper)}
+.s-kit .chip:last-child:nth-child(3n+1){grid-column:2}
+.chip{display:flex;flex-direction:column;gap:4px;padding:6px 7px;border-radius:10px;background:var(--paper)}
 .chip i{display:grid;place-items:center;width:22px;height:22px;border-radius:7px;background:color-mix(in srgb,var(--acc) 16%,#fff);color:var(--acc);font:700 12px/1 var(--f-jp);font-style:normal}
 .chip b{font:600 11px/1 var(--f-en);color:#2a2733}
 .s-pair{flex-direction:row;align-items:center;justify-content:center;gap:8px}
@@ -209,15 +210,15 @@ body{margin:0;font-family:var(--f-jp);overflow-x:hidden}
       <article class="card" data-group="card" style="--acc:#7b6cff;--sr:1.2deg;--sy:-4px">
         <div class="slot s-face"><div class="part p-face" data-kind="face" data-card="1" style="--acc:#7b6cff">
           <div class="f-head"><p class="f-top">02 — MAKE</p><h2 class="f-name">userkit</h2><p class="f-jp">user づくりの道具箱</p></div>
-          <div class="spec s-kit"><span class="chip"><i>帳</i><b>userprof</b></span><span class="chip"><i>隠</i><b>usermask</b></span><span class="chip"><i>録</i><b>talklog</b></span><span class="chip"><i>対</i><b>userpair</b></span><span class="chip"><i>歴</i><b>userline</b></span><span class="chip"><i>映</i><b>usersns</b></span></div>
-          <p class="f-desc">zeta で使う、あなたのキャラクター＝user のための 6 つの道具。プロフィール帳から、スクショの名前隠しまで。</p>
+          <div class="spec s-kit"><span class="chip"><i>帳</i><b>userprof</b></span><span class="chip"><i>隠</i><b>usermask</b></span><span class="chip"><i>録</i><b>talklog</b></span><span class="chip"><i>対</i><b>userpair</b></span><span class="chip"><i>歴</i><b>userline</b></span><span class="chip"><i>映</i><b>usersns</b></span><span class="chip"><i>札</i><b>usercard</b></span></div>
+          <p class="f-desc">zeta で使う、あなたのキャラクター＝user のための道具。プロフィール帳からスクショの名前隠しまで。</p>
           <div class="f-foot"><a class="btn" href="https://purity0km-droid.github.io/userkit/" target="_blank" rel="noopener">ひらく ↗</a><button class="ghost" type="button" data-flip="1" aria-label="userkit のできることを見る">できること</button></div>
           <p class="nombre">— 02 —</p>
         </div></div>
         <div class="slot s-emb"><div class="part p-emb" data-kind="emb" data-card="1" style="--acc:#7b6cff" aria-hidden="true"><span class="e-no">02</span><span class="e-kanji">作</span></div></div>
         <div class="slot s-back"><div class="part p-back" data-kind="back" data-card="1" style="--acc:#7b6cff" inert>
           <p class="b-label">02 — MAKE · できること</p><p class="b-name">userkit</p>
-          <ul><li>userprof：プロフィール・年表・設定メモをまとめて保存</li><li>usermask：スクショの名前やアイコンを、なぞって隠す</li><li>userpair・userline・usersns：関係や日々を 1 枚の画像に</li></ul>
+          <ul><li>userprof：プロフィール・年表・設定メモをまとめて保存</li><li>usermask：スクショの名前やアイコンを、なぞって隠す</li><li>userpair・userline・usersns：関係や日々を 1 枚の画像にまとめる</li><li>usercard：プロフィールをホロカードにして、画像と動画で保存</li></ul>
           <p class="b-url">purity0km-droid.github.io/userkit/</p>
           <div class="f-foot"><a class="btn" href="https://purity0km-droid.github.io/userkit/" target="_blank" rel="noopener">ひらく ↗</a><button class="ghost" type="button" data-flip="1" aria-label="userkit の表にもどる">もどる</button></div>
         </div></div>
@@ -293,7 +294,7 @@ const hexRgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255);
 const parts = [...document.querySelectorAll('.part')].map((el, idx) => ({
   idx, el, slot: el.parentElement, kind: KIND[el.dataset.kind], grp: el.dataset.card ? +el.dataset.card : -1,
   acc: hexRgb(el.style.getPropertyValue('--acc').trim() || '#7b6cff'), seed: Math.random(),
-  tex: null, tw: 0, th: 0, ok: false, bg: null, chk: 0, gk: '',
+  tex: null, tex1: null, tw: 0, th: 0, ss: 1, ok: false, bg: null, chk: 0, gk: '',
   rx: 0, ry: 0, rw: 0, rh: 0, px: 0, py: 0, rot: 0, lift: 0, tx: 0, ty: 0, hov: 0, lu: .5, lv: .5, shadow: 0, alpha: 1,
   turnF: 0, turnMode: 0, halfW: 1, halfH: 1,
 }));
@@ -480,27 +481,38 @@ function fallbackOverlay(why) {
   for (const C of groups) C.wrap.classList.toggle('flipped', C.side === 1);
   showMode();
 }
-function elemSize(el) {
-  if (cv.getElementImageDefaultSize) { const s = cv.getElementImageDefaultSize(el); return [Math.ceil(s.width), Math.ceil(s.height)]; }
+// 写す細かさ（画面の 1 画素あたりの像の画素）。傾けて貼るカードは補間で文字が柔らかくなるので、2 倍で写して縮めて描く
+// （画面が 2 倍近くの細かさなら 1 倍のまま。Chrome 156 は大きく写すと文字を描き直すので、引き伸ばしにはならない）
+function texScale(P) { return P.grp >= 0 && cv.width / Math.max(1, cv.clientWidth) < 1.9 ? 2 : 1; }
+function elemSize(el, s) {
+  if (cv.getElementImageDefaultSize) { const d = cv.getElementImageDefaultSize(el); return [Math.ceil(d.width * s), Math.ceil(d.height * s)]; }
   const k = cv.width / Math.max(1, cv.clientWidth);
-  return [Math.ceil(el.offsetWidth * k), Math.ceil(el.offsetHeight * k)];
+  return [Math.ceil(el.offsetWidth * k * s), Math.ceil(el.offsetHeight * k * s)];
 }
 function upload(P) {
   const el = P.el, d = gpu.dev, q = d.queue;
   if (!el.offsetWidth || !el.offsetHeight) return;
   try {
-    const [w, h] = elemSize(el);
-    if (!P.tex || w !== P.tw || h !== P.th) {
+    // 2 倍で写すときは、活版の押し込みを見るための 1 倍の像も写す（2 倍の像でぼかすと、細い字まで太い字に見えて押し込まれる）
+    const s = texScale(P), [w, h] = elemSize(el, s), [w1, h1] = s > 1 ? elemSize(el, 1) : [w, h];
+    if (!P.tex || w !== P.tw || h !== P.th || s !== P.ss) {
+      if (P.tex1 !== P.tex) P.tex1?.destroy();
       P.tex?.destroy();
-      P.tex = d.createTexture({ size: [w, h], format: 'rgba8unorm', usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.COPY_SRC | GPUTextureUsage.RENDER_ATTACHMENT });
+      const mk = (w, h) => d.createTexture({ size: [w, h], format: 'rgba8unorm', usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.COPY_SRC | GPUTextureUsage.RENDER_ATTACHMENT });
+      P.tex = mk(w, h);
+      P.tex1 = s > 1 ? mk(w1, h1) : P.tex;
       P.tw = w;
       P.th = h;
-      P.bg = d.createBindGroup({ layout: gpu.texBGL, entries: [{ binding: 0, resource: P.tex.createView() }] });
+      P.ss = s;
+      P.bg = d.createBindGroup({ layout: gpu.texBGL, entries: [{ binding: 0, resource: P.tex.createView() }, { binding: 1, resource: P.tex1.createView() }] });
     }
     const chk = ++P.chk <= 3;  // 最初の何回かは写せたかを確かめる（WebGPU のエラーは後から届く）
     if (chk) d.pushErrorScope('validation');
-    if (q.drawElementImageToTexture) q.drawElementImageToTexture({ source: el }, { texture: P.tex, size: { width: w, height: h }, premultipliedAlpha: true });
-    else q.copyElementImageToTexture({ source: el }, { destination: { texture: P.tex, premultipliedAlpha: true }, width: w, height: h });
+    const draw = (texture, width, height) => q.drawElementImageToTexture
+      ? q.drawElementImageToTexture({ source: el }, { texture, size: { width, height }, premultipliedAlpha: true })
+      : q.copyElementImageToTexture({ source: el }, { destination: { texture, premultipliedAlpha: true }, width, height });
+    draw(P.tex, w, h);
+    if (P.tex1 !== P.tex) draw(P.tex1, w1, h1);
     if (chk) d.popErrorScope().then(err => { if (err) { console.warn('写せませんでした', err.message); fallbackOverlay('upload failed'); } });
     P.ok = true;
   } catch (err) {
@@ -567,6 +579,7 @@ const W_RENDER = /* wgsl */`
 @group(0) @binding(2) var samp: sampler;
 @group(0) @binding(3) var<storage, read> dust: array<vec2f>;
 @group(1) @binding(0) var tex: texture_2d<f32>;
+@group(1) @binding(1) var tex1: texture_2d<f32>;  // 1 倍で写した像（活版の押し込みを見る。tex が 1 倍なら同じ物）
 
 fn corner(vi: u32) -> vec2f {
   var cs = array<vec2f, 6>(vec2f(0.0, 0.0), vec2f(1.0, 0.0), vec2f(0.0, 1.0), vec2f(0.0, 1.0), vec2f(1.0, 0.0), vec2f(1.0, 1.0));
@@ -683,8 +696,8 @@ struct QO { @builtin(position) pos: vec4f, @location(0) uv: vec2f, @location(1) 
 // 活版: 墨の量と紙（不透明度）をぼかして見る。太い字ほど深く押し込まれ、本文の細い字はほとんど凹まない
 fn inkA(s: vec4f) -> vec2f { return vec2f((1.0 - lum(s.rgb / max(s.a, 1e-4))) * s.a, s.a); }
 fn blurIA(uv: vec2f, o: vec2f) -> vec2f {
-  return 0.25 * (inkA(textureSampleLevel(tex, samp, uv + o, 0.0)) + inkA(textureSampleLevel(tex, samp, uv - o, 0.0))
-    + inkA(textureSampleLevel(tex, samp, uv + vec2f(o.x, -o.y), 0.0)) + inkA(textureSampleLevel(tex, samp, uv + vec2f(-o.x, o.y), 0.0)));
+  return 0.25 * (inkA(textureSampleLevel(tex1, samp, uv + o, 0.0)) + inkA(textureSampleLevel(tex1, samp, uv - o, 0.0))
+    + inkA(textureSampleLevel(tex1, samp, uv + vec2f(o.x, -o.y), 0.0)) + inkA(textureSampleLevel(tex1, samp, uv + vec2f(-o.x, o.y), 0.0)));
 }
 fn rainbow(ph: f32) -> vec3f { return 0.55 + 0.45 * cos(6.2831853 * (ph + vec3f(0.0, 0.33, 0.67))); }
 @fragment fn fsQ(i: QO) -> @location(0) vec4f {
@@ -718,7 +731,7 @@ fn rainbow(ph: f32) -> vec3f { return 0.55 + 0.45 * cos(6.2831853 * (ph + vec3f(
     c = vec4f((c.rgb + vec3f(1.0, 0.97, 1.0) * exp(-dot(gd, gd) * 3.0) * hv * 0.06 * c.a) * (0.86 + 0.14 * i.nz) * att, c.a);
     return c * (P.fx.x * e);
   }
-  let ts = 1.0 / vec2f(textureDimensions(tex));
+  let ts = 1.0 / vec2f(textureDimensions(tex1));
   let ob = ts * select(1.2, 1.8, kind == 3u);
   let r = ts * select(1.8, 2.4, kind == 3u);
   let c0 = blurIA(i.uv, ob);
@@ -818,7 +831,7 @@ async function gpuInit() {
     { binding: 2, visibility: S.FRAGMENT, sampler: { type: 'filtering' } },
     { binding: 3, visibility: S.VERTEX, buffer: { type: 'read-only-storage' } },
   ] });
-  const texBGL = dev.createBindGroupLayout({ entries: [{ binding: 0, visibility: S.FRAGMENT, texture: { sampleType: 'float' } }] });
+  const texBGL = dev.createBindGroupLayout({ entries: [0, 1].map(binding => ({ binding, visibility: S.FRAGMENT, texture: { sampleType: 'float' } })) });
   const bg0 = dev.createBindGroup({ layout: bgl0, entries: [
     { binding: 0, resource: { buffer: gBuf } }, { binding: 1, resource: { buffer: pBuf } },
     { binding: 2, resource: dev.createSampler({ magFilter: 'linear', minFilter: 'linear' }) }, { binding: 3, resource: { buffer: dBuf } },
@@ -851,9 +864,12 @@ function watchStage() {
 }
 
 const GF = new Float32Array(16), PF = new Float32Array(MAXPARTS * 28);
+// 部品は、写した像の画素が画面の画素にちょうど重なるように置く（倍率 125% などで位置や大きさに端数が出ると、補間で文字が滲む）。
+// 回す中心と、中心から部品の角までのずれを画素にそろえ、大きさは写した像の大きさ（÷ 写す細かさ）にする
 function packParts(k) {
   for (const P of parts) {
-    PF.set([P.rx * k, P.ry * k, P.rw * k, P.rh * k, P.px * k, P.py * k, P.rot, P.lift * k, P.tx, P.ty, 0, P.kind,
+    const px = Math.round(P.px * k), py = Math.round(P.py * k), s = P.ss || 1;
+    PF.set([px + Math.round((P.rx - P.px) * k), py + Math.round((P.ry - P.py) * k), P.tw ? P.tw / s : P.rw * k, P.th ? P.th / s : P.rh * k, px, py, P.rot, P.lift * k, P.tx, P.ty, 0, P.kind,
       P.alpha, P.hov, 0, 0, ...P.acc, 0, P.lu, P.lv, P.seed, P.shadow, P.turnF, P.halfW * k, P.halfH * k, P.turnMode], P.idx * 28);
   }
 }

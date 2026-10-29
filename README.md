@@ -10,7 +10,7 @@ AI チャットのキャラクターと過ごす時間のための、ブラウ�
 | | 名前 | できること | ページ |
 |---|---|---|---|
 | 01 読 | Talklog Viewer | talklog で保存したトークを、トーク画面に近い見た目で読み返す・立ち絵つきで再生する | https://purity0km-droid.github.io/log-viewer/ |
-| 02 作 | userkit | zeta の user のための 6 つの道具（プロフィール帳・名前隠し・トーク保存など） | https://purity0km-droid.github.io/userkit/ |
+| 02 作 | userkit | zeta の user のための道具（プロフィール帳・名前隠し・トーク保存など） | https://purity0km-droid.github.io/userkit/ |
 | 03 繋 | Pair Canvas | 2 人の画像と名前、関係性の説明を 1 枚の画像にまとめる | https://purity0km-droid.github.io/pair-canvas/ |
 | 04 集 | キャラクター図鑑 | 画像生成のプロンプトと生成設定を、キャラクターごとに登録して探す | https://purity0km-droid.github.io/prompt/ |
 
