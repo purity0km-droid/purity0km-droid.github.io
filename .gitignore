@@ -1,0 +1,8 @@
+# 公開する（GitHub Pages に出す）のは index.html・README.md と、SNS のカードの画像 ogp.png だけ（画像の元 ogp/ と make-ogp.ps1 は入れない）。
+# mock/ は案を選ぶための見本、shots/ は撮影、HANDOFF.md・CODEMAP.md は開発メモなので入れない
+/*
+!/.gitignore
+!/.nojekyll
+!/index.html
+!/README.md
+!/ogp.png
